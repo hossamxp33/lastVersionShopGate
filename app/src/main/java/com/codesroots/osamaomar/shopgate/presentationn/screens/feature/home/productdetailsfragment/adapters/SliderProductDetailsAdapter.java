@@ -28,7 +28,7 @@ public class SliderProductDetailsAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         LayoutInflater layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert layoutInflater != null;
-        View view = layoutInflater.inflate(R.layout.viewpagerslide_home1, container, false);
+        View view = layoutInflater.inflate(R.layout.viewpagerslide, container, false);
         ImageView im_slider =  view.findViewById(R.id.im_slider);
 
         Glide.with(activity.getApplicationContext())

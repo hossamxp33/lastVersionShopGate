@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.codesroots.osamaomar.shopgate.R;
 import com.codesroots.osamaomar.shopgate.entities.Favoriets;
+import com.codesroots.osamaomar.shopgate.helper.AddorRemoveCallbacks;
 import com.codesroots.osamaomar.shopgate.helper.PreferenceHelper;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.home.favorite.FavoritesViewModel;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.home.productdetailsfragment.ProductDetailsFragment;
@@ -35,7 +36,7 @@ public class AllFavProductsAdapter extends RecyclerView.Adapter<AllFavProductsAd
     private Context context;
     private List<Favoriets.DataBean> productsbysubcats;
     FavoritesViewModel viewModel;
-
+    int userid = PreferenceHelper.getUserId(), favid = 0;
     public AllFavProductsAdapter(Context mcontext, List<Favoriets.DataBean> productsbysubcats1, FavoritesViewModel mViewModel) {
         context = mcontext;
         productsbysubcats = productsbysubcats1;
@@ -54,38 +55,46 @@ public class AllFavProductsAdapter extends RecyclerView.Adapter<AllFavProductsAd
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        holder.favorite.setVisibility(View.GONE);
+        holder.addtocart.setVisibility(View.GONE);
         try {
-            holder.favorite.setVisibility( View.VISIBLE);
-holder.oldprice.setVisibility(View.INVISIBLE);
+            holder.del_favorite.setVisibility( View.VISIBLE);
+            holder.oldprice.setVisibility(View.INVISIBLE);
             if (productsbysubcats.get(position).getProduct().getProductphotos().size() > 0)
                 Glide.with(context.getApplicationContext())
                         .load(productsbysubcats.get(position).getProduct().getImg())
                         .placeholder(R.drawable.product).dontAnimate()
                         .into(holder.Image);
-
+            holder.price.setText(productsbysubcats.get(position).getProduct().getProductsizes().get(0).getCurrent_price() + " " +
+                    PreferenceHelper.getCurrency());
             holder.name.setText(productsbysubcats.get(position).getProduct().getName());
+            holder.amount.setText(context.getText(R.string.remendier) + " " +
+                    String.valueOf(productsbysubcats.get(position).getProduct().getProductsizes().get(position).getAmount()) + " " + context.getText(R.string.num));
 
             if (productsbysubcats.get(position).getProduct().getTotal_rating() != null)
                 if (productsbysubcats.get(position).getProduct().getTotal_rating().size() > 0) {
-                    holder.ratingBar.setRating(productsbysubcats.get(position).getProduct().getTotal_rating().get(0).getStars() /
-                            productsbysubcats.get(position).getProduct().getTotal_rating().get(0).getCount());
-                    holder.rateCount.setText("(" + productsbysubcats.get(position).getProduct().getTotal_rating().get(0).getCount() + ")");
+                    holder.ratingBar.setRating(productsbysubcats.get(position).getProduct().getTotal_rating().get(position).getStars() /
+                            productsbysubcats.get(position).getProduct().getTotal_rating().get(position).getCount());
+                    holder.rateCount.setText("(" + productsbysubcats.get(position).getProduct().getTotal_rating().get(position).getCount() + ")");
                 }
-            holder.amount.setText(context.getText(R.string.remendier) + " " +
-                    String.valueOf(productsbysubcats.get(position).getProduct().getProductsizes().get(0).getAmount()) + " " + context.getText(R.string.num));
-            holder.price.setText(productsbysubcats.get(position).getProduct().getProductsizes().get(0).getCurrent_price() + " " +
-                    PreferenceHelper.getCurrency());
+
+
         } catch (Exception e) {
         }
 
+        holder.mView.setOnClickListener(v ->{
 
-        Fragment fragment = new ProductDetailsFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(PRODUCT_ID, productsbysubcats.get(position).getProduct().getId());
-        fragment.setArguments(bundle);
-        holder.mView.setOnClickListener(v -> ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().
-                replace(R.id.mainfram, fragment)
-                .addToBackStack(null).commit());
+                    Fragment fragment = new ProductDetailsFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(PRODUCT_ID, productsbysubcats.get(position).getProduct().getId());
+                    fragment.setArguments(bundle);
+                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().
+                            replace(R.id.mainfram, fragment)
+                            .addToBackStack(null).commit();
+                }
+
+        );
+
 
 //        holder.ratingBar.setOnTouchListener((v, event) -> {
 //            if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -96,7 +105,7 @@ holder.oldprice.setVisibility(View.INVISIBLE);
 //            return true;
 //        });
 
-        holder.favorite.setOnClickListener(v -> {
+        holder.del_favorite.setOnClickListener(v -> {
             viewModel.curent_position=position;
             viewModel.DeleteFav(PreferenceHelper.getUserId(),productsbysubcats.get(position).getProduct_id());
         });
@@ -123,8 +132,8 @@ holder.oldprice.setVisibility(View.INVISIBLE);
 
     class ViewHolder extends RecyclerView.ViewHolder {
         final View mView;
-        private ImageView Image, favorite;
-        private TextView name, rateCount, amount, price,oldprice;
+        private ImageView Image, favorite,del_favorite;
+        private TextView name, rateCount, amount, price,oldprice,addtocart;
         private RatingBar ratingBar;
 
         ViewHolder(View view) {
@@ -136,8 +145,11 @@ holder.oldprice.setVisibility(View.INVISIBLE);
             amount = mView.findViewById(R.id.quentity);
             rateCount = mView.findViewById(R.id.rate_count);
             ratingBar = mView.findViewById(R.id.rates);
-            favorite = mView.findViewById(R.id.del_favorite);
+            del_favorite = mView.findViewById(R.id.del_favorite);
+            favorite = mView.findViewById(R.id.favorite);
+
             oldprice = mView.findViewById(R.id.old_price);
+              addtocart = mView.findViewById(R.id.add_to_cart);
 
         }
     }

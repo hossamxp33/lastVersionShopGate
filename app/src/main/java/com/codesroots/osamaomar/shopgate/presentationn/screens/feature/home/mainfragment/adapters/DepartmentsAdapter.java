@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.codesroots.osamaomar.shopgate.R;
 import com.codesroots.osamaomar.shopgate.entities.Category;
 import com.codesroots.osamaomar.shopgate.entities.Subcat;
+import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.home.productfragment.ProductsFragment;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.home.subcategryfragment.SubcategryFragment;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.smallstore.smallStoreFramgent;
 
@@ -24,6 +25,7 @@ import java.util.List;
 import static com.codesroots.osamaomar.shopgate.entities.names.CAT_ID;
 import static com.codesroots.osamaomar.shopgate.entities.names.CAT_NAME;
 import static com.codesroots.osamaomar.shopgate.entities.names.CAT_TYPE;
+import static com.codesroots.osamaomar.shopgate.entities.names.SUB_CAT_ID;
 
 public class DepartmentsAdapter extends RecyclerView.Adapter<DepartmentsAdapter.ViewHolder>  {
 
@@ -54,18 +56,18 @@ public class DepartmentsAdapter extends RecyclerView.Adapter<DepartmentsAdapter.
         bundle.putInt(CAT_ID,categories.get(position).getId());
         bundle.putString(CAT_NAME,categories.get(position).getName());
         Fragment sucCates_fragment = new SubcategryFragment();
-        Fragment product_fragment = new smallStoreFramgent();
+        Fragment product_fragment = new ProductsFragment();
         sucCates_fragment.setArguments(bundle);
         product_fragment.setArguments(bundle);
 
-        if (categories.size()>0)
+        if (categories.get(position).getSubcats().size()>0)
         holder.mView.setOnClickListener(v ->
                 ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().
                 replace(R.id.mainfram, sucCates_fragment).addToBackStack(null).commit());
         else
         {
             bundle.putInt(CAT_TYPE,0);
-            bundle.putInt(CAT_ID,categories.get(position).getId());
+            bundle.putInt(SUB_CAT_ID,categories.get(position).getId());
             holder.mView.setOnClickListener(v -> ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().
                     replace(R.id.mainfram, product_fragment).addToBackStack(null).commit());
         }

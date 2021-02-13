@@ -24,6 +24,7 @@ import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.aboutus.c
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.conditions.ConditionsActivity;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.contact.ContactFragment;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.country.CountriesActivity;
+import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.home.mainactivity.MainActivity;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.home.mainfragment.MainFragment;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.home.productdetailsfragment.ProductDetailsModelFactory;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.login.LoginFragment;
@@ -137,12 +138,12 @@ public class MenuFragment extends Fragment {
 
     private void showDialog(List<DataBean> dataBeanList) {
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
-        builderSingle.setTitle("Select One Name:-");
+        builderSingle.setTitle(getString(R.string.choose_currency));
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_singlechoice);
         for (int i = 0; i < dataBeanList.size(); i++)
             arrayAdapter.add(dataBeanList.get(i).getName());
-        builderSingle.setNegativeButton("cancel", (dialog, which) -> dialog.dismiss());
+        builderSingle.setNegativeButton((getString(R.string.cancel)), (dialog, which) -> dialog.dismiss());
         builderSingle.setAdapter(arrayAdapter, (dialog, which) -> {
             String strName = arrayAdapter.getItem(which);
             AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
@@ -150,8 +151,8 @@ public class MenuFragment extends Fragment {
             PreferenceHelper.setCURRENCY(dataBeanList.get(which).getName());
             PreferenceHelper.setCURRENCYArabic(dataBeanList.get(which).getName_ar());
             PreferenceHelper.setCURRENCY_VALUE(dataBeanList.get(which).getValue());
-            builderInner.setTitle("Your Selected Item is");
-            builderInner.setPositiveButton("Ok", (dialog1, which1) -> dialog1.dismiss());
+            builderInner.setTitle((getString(R.string.your_selected)));
+            builderInner.setPositiveButton((getString(R.string.ok)), (dialog1, which1) -> dialog1.dismiss());
             builderInner.show();
             FragmentManager fm = getActivity().getSupportFragmentManager();
             for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {

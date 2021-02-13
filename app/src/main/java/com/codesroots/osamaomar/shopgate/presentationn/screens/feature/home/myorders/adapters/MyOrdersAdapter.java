@@ -145,7 +145,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.ViewHo
             productname = mView.findViewById(R.id.item_name);
             ratecount = mView.findViewById(R.id.rate_count);
             ratingBar = mView.findViewById(R.id.rates);
-            color = mView.findViewById(R.id.product_color_text);
+         //   color = mView.findViewById(R.id.product_color_text);
 
             gotodetails = mView.findViewById(R.id.gotodetails);
         }

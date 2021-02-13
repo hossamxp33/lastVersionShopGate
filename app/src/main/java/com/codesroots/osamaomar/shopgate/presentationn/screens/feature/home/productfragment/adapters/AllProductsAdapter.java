@@ -80,6 +80,7 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
                     getProductsizes().get(0).getCurrent_price() *
                     PreferenceHelper.getCurrencyValue()) );
             //////////////////////////////////
+
             holder.name.setText(productsbysubcats.get(position).getName());
 
 
@@ -89,6 +90,13 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
                 holder.price.setText(productsbysubcats.get(position).getProductsizes().get(0).getCurrent_price() + " " + context.getText(R.string.coin));
 
 
+            Fragment fragment = new ProductDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt(PRODUCT_ID, productsbysubcats.get(position).getId());
+            fragment.setArguments(bundle);
+            holder.mView.setOnClickListener(v -> ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().
+                    replace(R.id.mainfram, fragment)
+                    .addToBackStack(null).commit());
 
         }catch (Exception e)
         {
@@ -96,16 +104,6 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
             Log.i("error", "onBindViewHolder: "+e);
         }
 
-
-
-
-        Fragment fragment = new ProductDetailsFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(PRODUCT_ID, productsbysubcats.get(position).getId());
-        fragment.setArguments(bundle);
-        holder.mView.setOnClickListener(v -> ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().
-                replace(R.id.mainfram, fragment)
-                .addToBackStack(null).commit());
 
 
 

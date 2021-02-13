@@ -25,13 +25,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codesroots.osamaomar.shopgate.R;
+import com.codesroots.osamaomar.shopgate.entities.AddToFavModel;
 import com.codesroots.osamaomar.shopgate.entities.ProductDetails;
 import com.codesroots.osamaomar.shopgate.entities.StoreSetting;
 import com.codesroots.osamaomar.shopgate.helper.AddorRemoveCallbacks;
@@ -39,7 +39,6 @@ import com.codesroots.osamaomar.shopgate.helper.PreferenceHelper;
 import com.codesroots.osamaomar.shopgate.helper.ResourceUtil;
 import com.codesroots.osamaomar.shopgate.helper.kotlinusercase;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.home.mainactivity.MainActivity;
-import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.home.productdetailsfragment.adapters.ProductImagesAdapter;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.home.productdetailsfragment.adapters.ProductSizesAdapter;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.home.productdetailsfragment.adapters.RelatedProductsAdapter;
 import com.codesroots.osamaomar.shopgate.presentationn.screens.feature.home.productdetailsfragment.adapters.SliderProductDetailsAdapter;
@@ -74,12 +73,13 @@ public class ProductDetailsFragment extends Fragment {
     public ImageView item_img;
     int userid = PreferenceHelper.getUserId(), favid = 0;
     ProductSizesAdapter productSizesAdapter;
-    ProductImagesAdapter productImagesAdapter;
+//    ProductImagesAdapter productImagesAdapter;
     ArrayList<String> images = new ArrayList<>();
     ImageView addToFav;
     Button share , hide_desc , show_desc;
     boolean productfav;
     public float priceafteroffer = 0;
+    AddToFavModel products ;
 
     ProductDetails.ProductdetailsBean productdetails;
     public StoreSetting setting;
@@ -169,6 +169,9 @@ public class ProductDetailsFragment extends Fragment {
 
         });
 
+
+
+
         addToFav.setOnClickListener(v ->
         {
             addToFav.setEnabled(false);
@@ -185,6 +188,8 @@ public class ProductDetailsFragment extends Fragment {
         {
             addToFav.setEnabled(true);
             addToFav.setImageResource(R.drawable.favoried);
+            productfav = true;
+
         });
 
         mViewModel.deleteToFavMutableLiveData.observe(this, aBoolean ->
@@ -312,7 +317,7 @@ public class ProductDetailsFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 sizeid = productdetailsBean.getProductsizes().get(position).getId();
-                //   if (position > 0 )
+                //   if (position > 0 )a
                 if (productdetailsBean.getOffers().size() > 0) {
                     //hasOffer = true;
                     float offerPercentage = Float.valueOf(productdetailsBean.getProductsizes().get(position).getCurrent_price()) * productdetailsBean.getOffers().get(0).getPercentage() / 100;
@@ -385,8 +390,8 @@ public class ProductDetailsFragment extends Fragment {
             else
 
                 productSizesAdapter = new ProductSizesAdapter(getActivity(), productdetailsBean.getProductsizes(), this, 0);
-            productImagesAdapter = new ProductImagesAdapter(getActivity(), productdetailsBean.getProductphotos(), this);
-            images_rec.setAdapter(productImagesAdapter);
+        //    productImagesAdapter = new ProductImagesAdapter(getActivity(), productdetailsBean.getProductphotos(), this);
+        //    images_rec.setAdapter(productImagesAdapter);
             sizes_rec.setAdapter(productSizesAdapter);
             product_name.setText(productdetailsBean.getName());
 

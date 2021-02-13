@@ -55,7 +55,7 @@ public class AllSubDepartsAdapter extends RecyclerView.Adapter<AllSubDepartsAdap
         holder.mView.setOnClickListener(v -> {
             Fragment fragment  = new ProductsFragment();
             Bundle bundle = new Bundle();
-            bundle.putInt(CAT_ID,subcats.get(position).getId());
+            bundle.putInt(SUB_CAT_ID,subcats.get(position).getId());
             bundle.putString(SUBCATES_NAME,subcats.get(position).getName());
             bundle.putInt(CAT_TYPE,1);
             fragment.setArguments(bundle);

@@ -24,6 +24,7 @@ import java.util.List;
 
 import static com.codesroots.osamaomar.shopgate.entities.names.CAT_ID;
 import static com.codesroots.osamaomar.shopgate.entities.names.CAT_NAME;
+import static com.codesroots.osamaomar.shopgate.entities.names.SUBCATES_NAME;
 
 public class SubcategryFragment extends Fragment {
 
@@ -47,7 +48,7 @@ public class SubcategryFragment extends Fragment {
         progress = view.findViewById(R.id.progress);
         text = view.findViewById(R.id.text);
         catid = getArguments().getInt(CAT_ID,0);
-        categry_name = getArguments().getString(CAT_NAME);
+        categry_name = getArguments().getString(SUBCATES_NAME);
         ((MainActivity)getActivity()).head_title.setText(categry_name);
         ((MainActivity)getActivity()).logo.setVisibility(View.VISIBLE);
         mViewModel = ViewModelProviders.of(this,getViewModelFactory()).get(SubCatesViewModel.class);

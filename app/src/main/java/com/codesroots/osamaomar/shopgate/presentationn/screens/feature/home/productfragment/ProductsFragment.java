@@ -49,13 +49,15 @@ public class ProductsFragment extends Fragment {
     private TextView notfound, subcates_name;
     private AllProductsAdapter AllProductsAdapter;
     private String title,name;
-private  boolean getDataNow = false;
-private int page = 1;
+    private  boolean getDataNow = false;
+    private int page = 1;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.products_fragment, container, false);
+        ((MainActivity) getActivity()).logo.setVisibility(View.VISIBLE);
+
         initialize(view);
         userID = PreferenceHelper.getUserId();
 
@@ -65,6 +67,7 @@ private int page = 1;
             mViewModel.getSearchData(name);
         else
             mViewModel.getData(1);
+
         mViewModel.productsMutableLiveData.observe(this, products ->
         {
             productsData = products.getProductsbycategory();
@@ -75,14 +78,9 @@ private int page = 1;
                         productsRecycle.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                         AllProductsAdapter = new AllProductsAdapter(getActivity(), 0, productsData, mViewModel);
                         productsRecycle.setAdapter(AllProductsAdapter);
-                    } else {
-                        getDataNow = false;
-                        productsData.addAll(products.getProductsbycategory());
-                        AllProductsAdapter.notifyDataSetChanged();
-                        productsRecycle.scrollToPosition(AllProductsAdapter.getItemCount() - 19);
                     }
                 } else {
-                    notfound.setVisibility(View.VISIBLE);
+                    //   notfound.setVisibility(View.VISIBLE);
                     changeSpane.setEnabled(false);
                     filter.setEnabled(false);
                 }
@@ -133,27 +131,29 @@ private int page = 1;
     private void initialize(View view) {
         productsRecycle = view.findViewById(R.id.allProducts);
         changeSpane = view.findViewById(R.id.change_span);
-       // filter = view.findViewById(R.id.filter);
+        // filter = view.findViewById(R.id.filter);
         filter_option = view.findViewById(R.id.filter_option);
         progress = view.findViewById(R.id.progress);
         notfound = view.findViewById(R.id.product_notfound);
         subcates_name = view.findViewById(R.id.subcates_name);
-        subCategry = getArguments().getInt(SUB_CAT_ID, 0);
-        type = getArguments().getInt(CAT_TYPE, 0);
+        subCategry = getArguments().getInt(SUB_CAT_ID);
+        type = getArguments().getInt(CAT_TYPE);
         title = getArguments().getString(SUBCATES_NAME);
         if (title != null) {
             subcates_name.setText(title);
-//            ((MainActivity) getActivity()).head_title.setText(title);
+
+        }else{
+            ((MainActivity) getActivity()).head_title.setText(title);
         }
-        ((MainActivity) getActivity()).logo.setVisibility(View.INVISIBLE);
+
         String[] name_of_bookmarks = getResources().getStringArray(R.array.filters);
         ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), R.layout.simple_list_item, name_of_bookmarks);
         filter_option.setAdapter(arrayAdapter);
         filter_option.setOnItemClickListener((parent, view1, position, id) -> {
         });
         changeSpane.setOnClickListener(onClickListener);
-      //  filter.setOnClickListener(onFilterClickListener);
-       // filter_option.setOnItemClickListener(AdapterView);
+        //  filter.setOnClickListener(onFilterClickListener);
+        // filter_option.setOnItemClickListener(AdapterView);
     }
 
     private AdapterView.OnItemClickListener AdapterView = new AdapterView.OnItemClickListener() {
